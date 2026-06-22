@@ -82,6 +82,8 @@ Desktop.ini
 
 # Build output
 dist/
+!wwwroot/lib/bootstrap/dist/
+!wwwroot/lib/bootstrap/dist/**
 build/
 
 # Code coverage
