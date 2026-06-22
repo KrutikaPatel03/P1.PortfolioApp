@@ -35,6 +35,18 @@ git clone https://github.com/yourusername/P1.PortfolioApp.git
 cd P1.PortfolioApp
 ```
 
+## Configuration
+
+Configuration is managed through `appsettings.json` files in each project. Environment-specific settings can be provided through:
+- `appsettings.{Environment}.json` files
+- Before running the application, update the following keys in the **API** project => appsettings.{Environment}.json:
+   ** "Seccl": {
+    "FirmId": "",
+    "UserId": "",
+    "Password": ""
+  }
+**
+
 ### Build the Solution
 
 ```bash
@@ -97,13 +109,6 @@ dotnet test
 # Clean build artifacts
 dotnet clean
 ```
-
-## Configuration
-
-Configuration is managed through `appsettings.json` files in each project. Environment-specific settings can be provided through:
-- `appsettings.{Environment}.json` files
-- Environment variables
-- Command-line arguments
 
 ## Contributing
 
