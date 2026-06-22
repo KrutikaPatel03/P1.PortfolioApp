@@ -1,0 +1,16 @@
+﻿.pagination .page-link {
+    color: var(--theme-color);
+    border-radius: 8px;
+    margin: 0 2px;
+}
+
+    .pagination .page-link:hover {
+        background-color: var(--theme-light);
+        color: var(--theme-color);
+    }
+
+.pagination .page-item.active .page-link {
+    background-color: var(--theme-color);
+    border-color: var(--theme-color);
+    color: white;
+}

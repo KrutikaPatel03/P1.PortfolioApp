@@ -1,0 +1,358 @@
+﻿@page "/portfolio/{ClientId}"
+
+@using P1.PortfolioApp.UI.Services
+@using P1.PortfolioApp.Core.Models
+@using P1.PortfolioApp.UI.Components.Custom
+
+@inject PortfolioApiClient PortfolioApi
+
+<nav aria-label="breadcrumb">
+
+    <ol class="breadcrumb">
+
+        <li class="breadcrumb-item">
+
+            <NavLink href="/">
+                Portfolios
+            </NavLink>
+
+        </li>
+
+        <li class="breadcrumb-item active">
+            @portfolio?.ClientName
+        </li>
+
+    </ol>
+
+</nav>
+
+@if (loading)
+{
+    <LoadingSpinner />
+}
+else if (portfolio != null)
+{
+    <!-- Portfolio Summary -->
+
+    <div class="list-group-item portfolio-item border-start border-2 rounded shadow-sm mb-4 p-4">
+
+        <div class="row align-items-center">
+
+            <!-- Client -->
+
+            <div class="col-md-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="client-avatar">
+                        @GetClientInitials(portfolio.ClientName)
+                    </div>
+
+                    <div class="ms-3">
+
+                        <h4 class="mb-1 client-name">
+                            @portfolio.ClientName
+                        </h4>
+
+                        <small class="text-muted">
+                            @ClientId
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Current Value -->
+
+            <div class="col-md-3">
+
+                <small class="text-muted d-block">
+                    Current Value
+                </small>
+
+                <h4 class="text-theme mb-0">
+                    @portfolio.CurrentValue.ToString("C")
+                </h4>
+
+            </div>
+
+            <!-- Cash -->
+
+            <div class="col-md-3">
+
+                <small class="text-muted d-block">
+                    Cash Balance
+                </small>
+
+                <h4 class="text-success mb-0">
+                    @portfolio.CashBalance.ToString("C")
+                </h4>
+
+            </div>
+
+            <!-- Currency -->
+
+            <div class="col-md-2">
+
+                <small class="text-muted d-block">
+                    Currency
+                </small>
+
+                <h5 class="mb-0">
+                    @portfolio.Currency
+                </h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Accounts -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header custom-header">
+
+            <div class="d-flex justify-content-between">
+
+                <span>
+                    Accounts
+                </span>
+
+                <span class="badge bg-light text-dark">
+                    @portfolio.Accounts.Count Account(s)
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Account Type</th>
+
+                        <th>Wrapper</th>
+
+                        <th class="text-end">
+                            Value
+                        </th>
+
+                        <th class="text-end">
+                            Cash
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var account in PagedAccounts)
+                    {
+                        <tr>
+
+                            <td>
+                                @account.accountType
+                            </td>
+
+                            <td>
+
+                                <span class="badge badge-theme">
+
+                                    @account.wrapperType
+
+                                </span>
+
+                            </td>
+
+                            <td class="text-end">
+
+                                @account.currentValue.ToString("C")
+
+                            </td>
+
+                            <td class="text-end text-success">
+
+                                @account.CashBalance.ToString("C")
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+            <Pagination CurrentPage="@accountPage"
+                        TotalPages="@AccountTotalPages"
+                        CurrentPageChanged="ChangeAccountPage" />
+
+        </div>
+
+    </div>
+
+    <!-- Positions -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-header custom-header">
+
+            <div class="d-flex justify-content-between">
+
+                <span>
+                    Positions
+                </span>
+
+                <span class="badge bg-light text-dark">
+                    @portfolio.Positions.Count Position(s)
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>
+                            Position Type
+                        </th>
+
+                        <th class="text-center">
+                            Quantity
+                        </th>
+
+                        <th class="text-end">
+                            Value
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var position in portfolio.Positions)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <span class="badge badge-theme">
+
+                                    @position.positionType
+
+                                </span>
+
+                            </td>
+
+                            <td class="text-center">
+
+                                @position.quantity
+
+                            </td>
+
+                            <td class="text-end">
+
+                                @position.currentValue.ToString("C")
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+}
+
+<ErrorAlert Message="@errorMessage" />
+
+@code {
+
+    [Parameter]
+    public string ClientId { get; set; } = "";
+
+    private PortfolioDetails? portfolio;
+
+    private bool loading = true;
+
+    private string errorMessage = "";
+    private int accountPage = 1;
+
+    private int accountPageSize = 5;
+
+    private int AccountTotalPages =>
+        portfolio == null
+            ? 0
+            : (int)Math.Ceiling(
+                (double)portfolio.Accounts.Count /
+                accountPageSize);
+
+    private IEnumerable<Account> PagedAccounts =>
+        portfolio?.Accounts
+            .Skip((accountPage - 1) * accountPageSize)
+            .Take(accountPageSize)
+        ?? [];
+
+    private async Task ChangeAccountPage(int page)
+    {
+        accountPage = page;
+        await LoadPortfolioDetails();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+          await  LoadPortfolioDetails();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+
+        loading = false;
+    }
+
+    private async Task LoadPortfolioDetails()
+    {
+        portfolio =
+                await PortfolioApi.GetPortfolioAsync(
+                    ClientId);
+    }
+    private static string GetClientInitials(string? clientName)
+    {
+        if (string.IsNullOrWhiteSpace(clientName))
+            return "";
+
+        var names = clientName.Split(
+            ' ',
+            StringSplitOptions.RemoveEmptyEntries);
+
+        if (names.Length == 1)
+            return names[0][0].ToString().ToUpper();
+
+        return $"{names[0][0]}{names[1][0]}"
+            .ToUpper();
+    }
+}
