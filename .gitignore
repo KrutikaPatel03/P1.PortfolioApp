@@ -57,7 +57,7 @@ nuget.config.local
 # Entity Framework migrations lock file
 appsettings.*.json
 !appsettings.json
-!appsettings.Development.json
+appsettings.Development.json
 
 # Application Insights
 ApplicationInsights.config
