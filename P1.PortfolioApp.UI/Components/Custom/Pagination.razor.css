@@ -14,3 +14,11 @@
     border-color: var(--theme-color);
     color: white;
 }
+.pagination {
+    flex-wrap: wrap;
+}
+
+    .pagination .page-link {
+        min-width: 40px;
+        text-align: center;
+    }

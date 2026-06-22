@@ -98,6 +98,25 @@ h1:focus {
     justify-content: center;
     box-shadow: 0 2px 8px var(--theme-shadow);
 }
+@media (max-width:768px) {
+    .client-avatar {
+        width: 42px;
+        height: 42px;
+        font-size: .9rem;
+    }
+}
+@media (max-width:768px) {
+
+    .portfolio-item {
+        padding: 1rem !important;
+    }
+}
+@media (max-width:768px) {
+
+    .portfolio-metric {
+        margin-top: .75rem;
+    }
+}
 .custom-header {
     background-color: var(--theme-color);
     color: white;

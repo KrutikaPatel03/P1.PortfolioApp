@@ -36,11 +36,11 @@ else if (portfolio != null)
 
     <div class="list-group-item portfolio-item border-start border-2 rounded shadow-sm mb-4 p-4">
 
-        <div class="row align-items-center">
+        <div class="row gy-4 align-items-center">
 
             <!-- Client -->
 
-            <div class="col-md-4">
+            <div class="col-12 col-md-4">
 
                 <div class="d-flex align-items-center">
 
@@ -66,7 +66,7 @@ else if (portfolio != null)
 
             <!-- Current Value -->
 
-            <div class="col-md-3">
+            <div class="col-6 col-md-3 portfolio-metric">
 
                 <small class="text-muted d-block">
                     Current Value
@@ -80,7 +80,7 @@ else if (portfolio != null)
 
             <!-- Cash -->
 
-            <div class="col-md-3">
+            <div class="col-6 col-md-3 portfolio-metric">
 
                 <small class="text-muted d-block">
                     Cash Balance
@@ -94,7 +94,7 @@ else if (portfolio != null)
 
             <!-- Currency -->
 
-            <div class="col-md-2">
+            <div class="col-12 col-md-2 portfolio-metric">
 
                 <small class="text-muted d-block">
                     Currency
@@ -131,68 +131,68 @@ else if (portfolio != null)
         </div>
 
         <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
 
-            <table class="table table-hover align-middle">
+                    <thead class="table-light">
 
-                <thead class="table-light">
-
-                    <tr>
-
-                        <th>Account Type</th>
-
-                        <th>Wrapper</th>
-
-                        <th class="text-end">
-                            Value
-                        </th>
-
-                        <th class="text-end">
-                            Cash
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    @foreach (var account in PagedAccounts)
-                    {
                         <tr>
 
-                            <td>
-                                @account.accountType
-                            </td>
+                            <th>Account Type</th>
 
-                            <td>
+                            <th>Wrapper</th>
 
-                                <span class="badge badge-theme">
+                            <th class="text-end">
+                                Value
+                            </th>
 
-                                    @account.wrapperType
-
-                                </span>
-
-                            </td>
-
-                            <td class="text-end">
-
-                                @account.currentValue.ToString("C")
-
-                            </td>
-
-                            <td class="text-end text-success">
-
-                                @account.CashBalance.ToString("C")
-
-                            </td>
+                            <th class="text-end">
+                                Cash
+                            </th>
 
                         </tr>
-                    }
 
-                </tbody>
+                    </thead>
 
-            </table>
+                    <tbody>
 
+                        @foreach (var account in PagedAccounts)
+                        {
+                            <tr>
+
+                                <td>
+                                    @account.accountType
+                                </td>
+
+                                <td>
+
+                                    <span class="badge badge-theme">
+
+                                        @account.wrapperType
+
+                                    </span>
+
+                                </td>
+
+                                <td class="text-end">
+
+                                    @account.currentValue.ToString("C")
+
+                                </td>
+
+                                <td class="text-end text-success">
+
+                                    @account.CashBalance.ToString("C")
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+            </div>
             <Pagination CurrentPage="@accountPage"
                         TotalPages="@AccountTotalPages"
                         CurrentPageChanged="ChangeAccountPage" />
@@ -222,7 +222,7 @@ else if (portfolio != null)
         </div>
 
         <div class="card-body">
-
+            <div class="table-responsive">
             <table class="table table-hover align-middle">
 
                 <thead class="table-light">
@@ -279,7 +279,7 @@ else if (portfolio != null)
                 </tbody>
 
             </table>
-
+            </div>
         </div>
 
     </div>
@@ -324,7 +324,7 @@ else if (portfolio != null)
     {
         try
         {
-          await  LoadPortfolioDetails();
+            await LoadPortfolioDetails();
         }
         catch (Exception ex)
         {
